@@ -10,3 +10,13 @@ function test(){
 }
 document.body.appendChild(test());
 */
+const displayForm = document.querySelector('.toggle-taskform-btn');
+const hideForm = document.querySelector('.hide-form');
+const modal = document.querySelector('.modal');
+
+displayForm.addEventListener('click',()=>{
+    modal.showModal();
+})
+hideForm.addEventListener('click',(e)=>{
+    modal.close();
+})

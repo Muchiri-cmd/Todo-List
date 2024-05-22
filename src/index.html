@@ -15,26 +15,61 @@
         </div>
         <div class="content">
             <div class="projects-container">
-                <h2>Projects</h2>
+                <div class="projects-header">
+                    <h2>Projects</h2>
+                    <button class="toggle-form-btn"><span>+</span></button>
+                </div>
+                <form action="" class="add-project-btn">
+                    <input type="text" class="new-project" placeholder="add new project">
+                    <button class="add-project-btn">Add</button>
+                </form>
                 <ul class="projects-list">
-                    <li><span class="project-list-icon"><i class="fa-regular fa-square"></i></span> Project</li>
-                    <li><span class="project-list-icon"><i class="fa-regular fa-square"></i></span> Project</li>
-                    <li><span class="project-list-icon"><i class="fa-regular fa-square"></i></span> Project</li>
-                    <li><span class="project-list-icon"><i class="fa-regular fa-square"></i></span> Project</li>
-                    <li><span class="project-list-icon"><i class="fa-regular fa-square"></i></span> Project</li>
+                    <li><span class="project-list-icon"><i class="fa-regular fa-square"></i></span> Default Project</li>
                 </ul> 
+
+               
            </div>
            <div class="project-tasks-container">
                 <h2>Project Name</h2>
-                <h3>Tasks</h3>
-                <ul class="project-task-list">
-                    <li><span class="task-list-icon"><i class="fa-solid fa-circle-notch"></i></span> task</li>
-                    <li><span class="task-list-icon"><i class="fa-solid fa-circle-notch"></i></span> task</li>
-                    <li><span class="task-list-icon"><i class="fa-solid fa-circle-notch"></i></span> task</li>
-                    <li><span class="task-list-icon"><i class="fa-solid fa-circle-notch"></i></span> task</li>
-                    <li><span class="task-list-icon"><i class="fa-solid fa-circle-notch"></i></span> task</li>
-                    <li><span class="task-list-icon"><i class="fa-solid fa-circle-notch"></i></span> task</li>
-                </ul>
+                <div class="tasks-header">
+                    <h3>Tasks</h3>
+                    <button class="toggle-taskform-btn">Add Task&nbsp;&nbsp;<span><i class="fa-solid fa-list-check"></i></span></button>
+                </div>
+                <div class="tasks-container">
+                    <div class="task-keys">
+                        <span>task</span><span>Priority</span><span>Due date</span>
+                    </div>
+                    <ul class="project-task-list">
+                        <li>
+                            <span class="task-list-item"><i class="fa-solid fa-circle-notch"></i> task</span>
+                            <span class="priority-header">High priority</span>
+                            <span class="duedate-header">date</span>
+                        </li>
+
+                    </ul>
+                </div>
+                <dialog class="modal" id="modal">
+                    <button class="hide-form">x</button>
+                    <form action="" class="task-form">
+                        <label for="title">Task </label>
+                        <input name="title" type="text" placeholder="title" required>
+                        <label for="description">Description </label>
+                        <input name="description" type="text" placeholder="description">
+                        <label for="duedate">Due </label>
+                         <input id="duedate" name="duedate" type="datetime-local" placeholder="title" required>
+                        <label for="priority">Priority </label>
+                        <select name="priority" id="priority">
+                            <option value="high">High</option>
+                            <option value="high">Medium</option>
+                            <option value="high">Low</option>
+    
+                        </select>
+                        <button type="submit" class="add-task-btn">Submit Tasks</button>
+    
+                    </form>
+                </dialog>
+               
+             
            </div>
         </div>
         </div>
