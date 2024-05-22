@@ -1,0 +1,41 @@
+*{
+    padding:0;
+    margin:0;
+    box-sizing: border-box;
+}
+body{
+    font-size:20px;
+    height:100vh;
+    padding:2em;
+    width:90vw;
+    margin: auto;
+}
+.header{
+    text-align: center;
+}
+li {
+    list-style-type: none;
+}
+.content{
+    padding:1.5em;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    min-height: 80vh;
+}
+.projects-container,.project-tasks-container{
+    padding:2em;
+    padding-left: 3em;
+    border-radius: .2em;
+}
+.project-task-list>li,.projects-list>li{
+    margin:1em;
+}   
+.projects-container{
+    background-color: aliceblue;
+}
+.project-tasks-container{
+    background-color:lavenderblush;
+}
+.project-tasks-container h3 {
+    margin:1em 0em;
+}
