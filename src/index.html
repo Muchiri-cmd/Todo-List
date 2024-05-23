@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo List</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="main.js" defer></script>
 </head>
 <body>
-    <div class="main">
+    <div class="main-container">
         <div class="header">
             <h1>Todo List</h1>
             <p>"Nothing is particularly hard if you divide it into small jobs." – Henry Ford</p>
@@ -19,12 +18,12 @@
                     <h2>Projects</h2>
                     <button class="toggle-form-btn"><span>+</span></button>
                 </div>
-                <form action="" class="add-project-btn">
-                    <input type="text" class="new-project" placeholder="add new project">
-                    <button class="add-project-btn">Add</button>
+                <form action="" class="add-project-form">
+                    <input name="add-new-project" type="text" class="new-project-input" placeholder="add new project">
+                    <button type='submit' class="add-project-btn">Add</button>
                 </form>
                 <ul class="projects-list">
-                    <li><span class="project-list-icon"><i class="fa-regular fa-square"></i></span> Default Project</li>
+                    <!--<li><span class="project-list-icon"><i class="fa-regular fa-square"></i></span> Default Project</li>-->
                 </ul> 
 
                
@@ -52,9 +51,9 @@
                     <button class="hide-form">x</button>
                     <form action="" class="task-form">
                         <label for="title">Task </label>
-                        <input name="title" type="text" placeholder="title" required>
+                        <input id="title" name="title" type="text" placeholder="title" required>
                         <label for="description">Description </label>
-                        <input name="description" type="text" placeholder="description">
+                        <input id="description" name="description" type="text" placeholder="description">
                         <label for="duedate">Due </label>
                          <input id="duedate" name="duedate" type="datetime-local" placeholder="title" required>
                         <label for="priority">Priority </label>

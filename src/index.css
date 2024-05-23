@@ -29,6 +29,9 @@ li {
 }
 .project-task-list>li,.projects-list>li{
     margin:1em;
+    &:hover{
+        cursor: pointer;
+    }
 }   
 .project-task-list li{
     display: flex;
@@ -78,13 +81,13 @@ li {
 .task-keys{
     padding:1em;
 }
-.new-project {
-background: transparent;
-border: 0;
-border-bottom: 1px solid black;
-font-size: inherit;
-outline: none;
-padding: 0.25em;
+.new-project-input {
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid black;
+    font-size: inherit;
+    outline: none;
+    padding: 0.25em;
 }
 .add-project-form{
     margin:.5em;
@@ -129,6 +132,4 @@ padding: 0.25em;
     font-size:1em;
     padding:.5em;
     border-radius: 2px;
-
-
 }
