@@ -6,6 +6,8 @@ const newProjectInput = document.querySelector('.new-project-input');
 const tasksForm = document.querySelector('.task-form');
 const taskSubmitBtn = document.querySelector('.add-task-btn');
 const tasksList = document.querySelector('.project-task-list');
+const tasksContainer = document.querySelector('.projects-tasks-container');
+const projectName = document.querySelector('.project-name');
 
 const displayForm = document.querySelector('.toggle-taskform-btn');
 const hideForm = document.querySelector('.hide-form');
@@ -19,11 +21,6 @@ let Projects = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PROJECT_KEY)) || [{
 //get selected project from projects
 let selectedProjectId = localStorage.getItem(LOCAL_STORAGE_SELECTED_PROJECT_KEY)
 
-const LOCAL_STORAGE_TASK_KEY = 'tasks'
-const LOCAL_STORAGE_SELECTED_TASK_KEY = 'selectedTaskId'
-
-let Tasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_SELECTED_TASK_KEY))||[]
-let selectedTaskId = localStorage.getItem(LOCAL_STORAGE_SELECTED_TASK_KEY)
 
 displayForm.addEventListener('click',()=>{
     modal.showModal();
@@ -57,10 +54,14 @@ projectForm.addEventListener('submit',e=>{
     }
 })
 //Listen for selected Project
-projectsList.addEventListener('click',e => {
+projectsList.addEventListener('click',e => {   
     if (e.target.tagName.toLowerCase() == 'li'){
         selectedProjectId = e.target.id;
         saveToLocalStorage();
+        const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
+        const selectedProject = Projects.find(project => project.id == numericProjectId);
+        renderProjectTasks(selectedProject);
+        
     }
 })
 function createProject(name){
@@ -76,38 +77,7 @@ function saveToLocalStorage(){
     localStorage.setItem(LOCAL_STORAGE_PROJECT_KEY,JSON.stringify(Projects))
     localStorage.setItem(LOCAL_STORAGE_SELECTED_PROJECT_KEY,selectedProjectId)
 }
-function saveTasks(){
-    localStorage.setItem(LOCAL_STORAGE_TASK_KEY,JSON.stringify(Tasks))
-    localStorage.setItem(LOCAL_STORAGE_SELECTED_TASK_KEY,selectedTaskId)
-}
 
-function renderProjectTasks(){
-    Tasks.forEach(task => {
-        const taskItem = document.createElement('li');
-
-        const taskListItemSpan = document.createElement('span');
-        taskListItemSpan.classList.add('task-list-item');
-        const icon = document.createElement('i');
-        icon.classList.add('fa-solid', 'fa-circle-notch');
-        taskListItemSpan.appendChild(icon);
-        taskListItemSpan.appendChild(document.createTextNode(` ${task.title}`));
-        
-        const prioritySpan = document.createElement('span');
-        prioritySpan.classList.add('priority-header');
-        prioritySpan.textContent = `${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)} priority`;
-        
-        const dueDateSpan = document.createElement('span');
-        dueDateSpan.classList.add('duedate-header');
-        const dueDate = new Date(task.duedate);
-        dueDateSpan.textContent = dueDate.toLocaleString();
-
-        taskItem.appendChild(taskListItemSpan);
-        taskItem.appendChild(prioritySpan);
-        taskItem.appendChild(dueDateSpan);
-
-        tasksList.appendChild(taskItem);
-    });
-}
 function renderProjects() {
     Projects.forEach(project => {
         //console.log(project);
@@ -147,18 +117,45 @@ tasksForm.addEventListener('submit',e=>{
     const priority = document.getElementById('priority').value
 
     const task = createTask(title,description,duedate,priority)
-    Tasks.push(task);
     clearElement(tasksList);
     //console.log(task)
     selectedProject.tasks.push(task);
-    saveTasks();
+    saveToLocalStorage();
     tasksForm.reset();
+    console.log(selectedProject)
     //modal.close()
-    renderProjectTasks();
+    renderProjectTasks(selectedProject);
 
 })
 function createTask(title,description,duedate,priority){
     return {title,description,duedate,priority,complete:false}
 }
 
-console.log(selectedProjectId)
+function renderProjectTasks(selectedProject){
+    clearElement(tasksList);
+    selectedProject.tasks.forEach(task => {
+        const taskItem = document.createElement('li');
+
+        const taskListItemSpan = document.createElement('span');
+        taskListItemSpan.classList.add('task-list-item');
+        const icon = document.createElement('i');
+        icon.classList.add('fa-solid', 'fa-circle-notch');
+        taskListItemSpan.appendChild(icon);
+        taskListItemSpan.appendChild(document.createTextNode(` ${task.title}`));
+        
+        const prioritySpan = document.createElement('span');
+        prioritySpan.classList.add('priority-header');
+        prioritySpan.textContent = `${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)} priority`;
+        
+        const dueDateSpan = document.createElement('span');
+        dueDateSpan.classList.add('duedate-header');
+        const dueDate = new Date(task.duedate);
+        dueDateSpan.textContent = dueDate.toLocaleString();
+
+        taskItem.appendChild(taskListItemSpan);
+        taskItem.appendChild(prioritySpan);
+        taskItem.appendChild(dueDateSpan);
+
+        tasksList.appendChild(taskItem);
+    });
+}
