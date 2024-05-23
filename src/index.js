@@ -60,6 +60,9 @@ projectsList.addEventListener('click',e => {
         saveToLocalStorage();
         const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
         const selectedProject = Projects.find(project => project.id == numericProjectId);
+        projectName.textContent = `${selectedProject.name}`;
+        clearElement(projectsList);
+        renderProjects();
         renderProjectTasks(selectedProject);
         
     }
@@ -82,15 +85,19 @@ function renderProjects() {
     Projects.forEach(project => {
         //console.log(project);
         const projectItem = document.createElement('li');
+        projectItem.classList.add('project-list-item')
         projectItem.id = `project-${project.id}`;
-
+       
         const span = document.createElement('span');
         span.classList.add('project-list-icon');
 
         const icon = document.createElement('i');
         icon.classList.add('fa-regular');
-        icon.classList.add('fa-square');
+        icon.classList.add('fa-circle');
 
+        if (projectItem.id === selectedProjectId) {
+            icon.classList.add('active');
+        }
         span.appendChild(icon);
         projectItem.appendChild(span);
 
@@ -98,11 +105,27 @@ function renderProjects() {
         const textNode = document.createTextNode(` ${project.name}`);
         projectItem.appendChild(textNode);
 
+        const delIcon = document.createElement('i');
+        delIcon.classList.add('fa-solid');
+        delIcon.classList.add('fa-trash');
+        delIcon.addEventListener('click',() => deleteProject(project.id))
+        projectItem.append(delIcon);
+
         projectsList.appendChild(projectItem);
     });
 }
-renderProjects();
+function deleteProject(projectId){
+    Projects = Projects.filter(project => project.id !== projectId);
+    selectedProjectId = 'project-0';
+    saveToLocalStorage();
+    clearElement(projectsList);
 
+    const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
+    const selectedProject = Projects.find(project => project.id == numericProjectId);
+    renderProjectTasks(selectedProject)
+    renderProjects();
+}
+renderProjects();
 
 //Tasks section
 tasksForm.addEventListener('submit',e=>{
@@ -139,7 +162,7 @@ function renderProjectTasks(selectedProject){
         const taskListItemSpan = document.createElement('span');
         taskListItemSpan.classList.add('task-list-item');
         const icon = document.createElement('i');
-        icon.classList.add('fa-solid', 'fa-circle-notch');
+        icon.classList.add('fa-regular', 'fa-square');
         taskListItemSpan.appendChild(icon);
         taskListItemSpan.appendChild(document.createTextNode(` ${task.title}`));
         
