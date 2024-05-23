@@ -36,7 +36,7 @@
                 </div>
                 <div class="tasks-container">
                     <div class="task-keys">
-                        <span>task</span><span>Priority</span><span>Due date</span>
+                        <span>task</span><span>Priority</span><span>Due date</span><span>Functions</span>
                     </div>
                     <ul class="project-task-list">
                     </ul>
@@ -44,6 +44,7 @@
                 <dialog class="modal" id="modal">
                     <button class="hide-form">x</button>
                     <form action="" class="task-form">
+                        <input type="hidden" id="taskId" name="taskId">
                         <label for="title">Task </label>
                         <input id="title" name="title" type="text" placeholder="title" required>
                         <label for="description">Description </label>

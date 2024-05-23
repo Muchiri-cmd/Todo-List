@@ -8,6 +8,7 @@ const taskSubmitBtn = document.querySelector('.add-task-btn');
 const tasksList = document.querySelector('.project-task-list');
 const tasksContainer = document.querySelector('.projects-tasks-container');
 const projectName = document.querySelector('.project-name');
+const taskListItem = document.querySelector('.task-list-item');
 
 const displayForm = document.querySelector('.toggle-taskform-btn');
 const hideForm = document.querySelector('.hide-form');
@@ -23,6 +24,7 @@ let selectedProjectId = localStorage.getItem(LOCAL_STORAGE_SELECTED_PROJECT_KEY)
 
 
 displayForm.addEventListener('click',()=>{
+    tasksForm.reset();
     modal.showModal();
 })
 hideForm.addEventListener('click',(e)=>{
@@ -128,6 +130,7 @@ function deleteProject(projectId){
 renderProjects();
 
 //Tasks section
+
 tasksForm.addEventListener('submit',e=>{
     const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
     const selectedProject = Projects.find(project => project.id == numericProjectId);
@@ -135,23 +138,53 @@ tasksForm.addEventListener('submit',e=>{
     //console.log(selectedProject);
     e.preventDefault();
     const title = document.getElementById('title').value;
-    const description = document.getElementById('description').value
     const duedate = document.getElementById('duedate').value
+    const description = document.getElementById('description').value
     const priority = document.getElementById('priority').value
+    const taskId = document.getElementById('taskId').value;
+    
+    if (taskId) {
+        //edit exisitng task
+        const task = selectedProject.tasks.find(task => task.id == taskId);
+        task.title = title;
+        task.description = description;
+        task.duedate = duedate;
+        task.priority = priority;
+       
+    } else {
+        //create new task
+        const task = createTask(title, description, duedate, priority);
+        selectedProject.tasks.push(task);
+    }
 
-    const task = createTask(title,description,duedate,priority)
-    clearElement(tasksList);
-    //console.log(task)
-    selectedProject.tasks.push(task);
     saveToLocalStorage();
+    clearElement(tasksList);
     tasksForm.reset();
-    console.log(selectedProject)
-    //modal.close()
+    document.getElementById('taskId').value = '';
+    modal.close();
     renderProjectTasks(selectedProject);
-
 })
 function createTask(title,description,duedate,priority){
-    return {title,description,duedate,priority,complete:false}
+    return {title,description,duedate,priority,complete:false, id: Date.now().toString()}
+}
+function completeTask(e){
+    const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
+    const selectedProject = Projects.find(project => project.id == numericProjectId);
+
+    if (e.target.closest('li')){
+        const taskId = e.target.closest('li').dataset.taskId;
+        //console.log(taskId);
+        
+        //console.log(selectedProject)
+        const task = selectedProject.tasks.find(task => task.id == taskId);
+        
+        //console.log(task);
+        if (task) {
+            task.complete = !task.complete; 
+            saveToLocalStorage();
+            renderProjectTasks(selectedProject); 
+        }
+   }
 }
 
 function renderProjectTasks(selectedProject){
@@ -161,8 +194,11 @@ function renderProjectTasks(selectedProject){
 
         const taskListItemSpan = document.createElement('span');
         taskListItemSpan.classList.add('task-list-item');
+        taskItem.dataset.taskId = task.id;
+
         const icon = document.createElement('i');
-        icon.classList.add('fa-regular', 'fa-square');
+        icon.classList.add('fa-regular', task.complete ? 'fa-check-square': 'fa-square');
+        icon.addEventListener('click',(e) => completeTask(e))
         taskListItemSpan.appendChild(icon);
         taskListItemSpan.appendChild(document.createTextNode(` ${task.title}`));
         
@@ -179,6 +215,46 @@ function renderProjectTasks(selectedProject){
         taskItem.appendChild(prioritySpan);
         taskItem.appendChild(dueDateSpan);
 
+        if (task.complete) {
+            taskItem.classList.add('complete');
+        }
+        const functionsDiv = document.createElement('div')
+        functionsDiv.classList.add('functions-div')
+        const deleteIcon = document.createElement('i');
+        deleteIcon.classList.add('fa-solid','fa-trash');
+        deleteIcon.addEventListener('click',()=>deleteTask(task.id));
+        const editIcon = document.createElement('i');
+        editIcon.classList.add('fa-solid','fa-pen');
+        editIcon.addEventListener('click',()=>editTask(task.id));
+        functionsDiv.appendChild(deleteIcon);
+        functionsDiv.appendChild(editIcon);
+        taskItem.appendChild(functionsDiv);
+
         tasksList.appendChild(taskItem);
     });
 }
+const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
+const selectedProject = Projects.find(project => project.id == numericProjectId);
+renderProjectTasks(selectedProject);
+
+function deleteTask(taskId) {
+    selectedProject.tasks = selectedProject.tasks.filter(task => task.id !== taskId);
+    saveToLocalStorage();
+    renderProjectTasks(selectedProject);
+}
+
+function editTask(id){
+    const task = selectedProject.tasks.find(task => task.id == id);
+    if (!task) return;
+
+    // Populate the form with the task values
+    document.getElementById('title').value = task.title;
+    document.getElementById('duedate').value = task.dueDate;
+    document.getElementById('description').value = task.description;
+    document.getElementById('priority').value = task.priority;
+    document.getElementById('taskId').value = task.id;
+
+    modal.showModal();
+}
+
+

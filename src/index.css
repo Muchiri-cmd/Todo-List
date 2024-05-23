@@ -19,7 +19,7 @@ li {
 .content{
     padding:1.5em;
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 3fr;
     min-height: 80vh;
 }
 .projects-container,.project-tasks-container{
@@ -35,7 +35,6 @@ li {
 }   
 .project-task-list li{
     display: flex;
-    border:2px solid white;
     padding:1em;
     background-color: white;
     border-radius: .5em;
@@ -45,7 +44,6 @@ li {
 }
 .project-tasks-container{
     background-color:lavenderblush;
-    
 }
 .project-tasks-container h3 {
     margin:1em 0em;
@@ -76,7 +74,7 @@ li {
 }
 .task-keys,.project-task-list li{
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(4,1fr);
 }
 .task-keys{
     padding:1em;
@@ -140,4 +138,15 @@ li {
 .fa-trash{
     margin-left:1em;
    
+}
+.project-task-list>.complete{
+    text-decoration:line-through;
+    color:grey;
+    opacity:.5;
+    
+}
+.functions-div{
+    i{
+        margin-left:3em;
+    }
 }
