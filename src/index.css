@@ -24,13 +24,14 @@ li {
 }
 .projects-container,.project-tasks-container{
     padding:2em;
-    padding-left: 3em;
     border-radius: .2em;
 }
 .project-task-list>li,.projects-list>li{
-    margin:1em;
-    &:hover{
-        cursor: pointer;
+    margin:.8em 2em 0em 2em;
+    display: flex;
+    align-items: center;
+    i{
+        margin-right:.3em;
     }
 }   
 .project-task-list li{
@@ -74,6 +75,7 @@ li {
 }
 .task-keys,.project-task-list li{
     display: grid;
+    gap:1em;
     grid-template-columns: repeat(4,1fr);
 }
 .task-keys{
@@ -88,12 +90,17 @@ li {
     padding: 0.25em;
 }
 .add-project-form{
-    margin:.5em;
+    margin:1em;
+    display: none;
+   
 }  
 .add-project-btn{
-    padding:.5em;
-    font-size: .9em;
+    padding:.3em;
+    font-size: .8em;
     border-radius:5px;
+    &:hover{
+        cursor: pointer;
+    }
 }
 .task-form{
    display: flex;
@@ -131,22 +138,57 @@ li {
     padding:.5em;
     border-radius: 2px;
 }
-.active{
-    background-color: black;
-    border-radius: 50%;
+.project-list-item.active{
+    border-radius: 10px;
+    box-shadow: none;
+    border:1px solid green;
+    transform: scale(1.1);
 }
-.fa-trash{
-    margin-left:1em;
-   
+
+.fa-regular{
+    font-size:1.6em;
 }
 .project-task-list>.complete{
     text-decoration:line-through;
     color:grey;
-    opacity:.5;
-    
+    opacity:.5;   
 }
 .functions-div{
     i{
         margin-left:3em;
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+.low{
+    border-left:30px solid #dc2626;
+}
+.medium{
+    border-left: 30px solid #f59e0b;
+}
+.high{
+    border-left: 30px solid green;
+}
+.task-list-item{
+    display: flex;
+    align-items: center;
+    i{
+        margin-right:.5em;
+        font-size:2em;
+        &:hover{
+            cursor: pointer;
+        }
+    }
+   
+}
+.project-list-item{
+    padding:.5em;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 10px;
+    box-shadow: 0 0 7px 2px #d1d5db;
+    &:hover{
+        cursor:pointer;
     }
 }

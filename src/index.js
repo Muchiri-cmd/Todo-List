@@ -4,11 +4,9 @@ const projectsList = document.querySelector('.projects-list');
 const projectForm = document.querySelector('.add-project-form')
 const newProjectInput = document.querySelector('.new-project-input');
 const tasksForm = document.querySelector('.task-form');
-const taskSubmitBtn = document.querySelector('.add-task-btn');
 const tasksList = document.querySelector('.project-task-list');
-const tasksContainer = document.querySelector('.projects-tasks-container');
 const projectName = document.querySelector('.project-name');
-const taskListItem = document.querySelector('.task-list-item');
+const toggleProjectFormBtn =  document.querySelector('.toggle-form-btn');
 
 const displayForm = document.querySelector('.toggle-taskform-btn');
 const hideForm = document.querySelector('.hide-form');
@@ -24,15 +22,26 @@ let selectedProjectId = localStorage.getItem(LOCAL_STORAGE_SELECTED_PROJECT_KEY)
 
 
 displayForm.addEventListener('click',()=>{
+    if (selectedProjectId){    
     tasksForm.reset();
     modal.showModal();
+    } else{
+        alert("No Project to attach tasks. Add Projects")
+    }
+   
 })
 hideForm.addEventListener('click',(e)=>{
     modal.close();
 })
-
-//create projects array
-let ProjectID = 1;
+toggleProjectFormBtn.addEventListener('click',()=>{
+    if (projectForm.style.display === 'none' || projectForm.style.display === '') {
+        projectForm.style.display = 'block';
+        const input = projectForm.querySelector('input'); 
+        input.focus();
+    } else {
+        projectForm.style.display = 'none';
+    }
+})
 
 function clearElement(elem){
     while (elem.firstChild){
@@ -49,8 +58,10 @@ projectForm.addEventListener('submit',e=>{
         //create project and add to Projects 
         const project = createProject(projectTitle) 
         Projects.push(project);
+        selectedProjectId = project.id;
         saveToLocalStorage();
         clearElement(projectsList);
+        projectForm.style.display = 'none';
         renderProjects();
         newProjectInput.value='';
     }
@@ -72,10 +83,9 @@ projectsList.addEventListener('click',e => {
 function createProject(name){
     const project = {
         name:name,
-        id:ProjectID,
+        id:Date.now().toString(),
         tasks:[]
     }
-    ProjectID++;
     return project;
 }
 function saveToLocalStorage(){
@@ -88,19 +98,18 @@ function renderProjects() {
         //console.log(project);
         const projectItem = document.createElement('li');
         projectItem.classList.add('project-list-item')
-        projectItem.id = `project-${project.id}`;
+        projectItem.id = `${project.id}`;
+        
        
         const span = document.createElement('span');
         span.classList.add('project-list-icon');
-
-        const icon = document.createElement('i');
-        icon.classList.add('fa-regular');
-        icon.classList.add('fa-circle');
+        
+        console.log(selectedProjectId);
 
         if (projectItem.id === selectedProjectId) {
-            icon.classList.add('active');
+            projectItem.classList.add('active');
         }
-        span.appendChild(icon);
+       
         projectItem.appendChild(span);
 
         // Append the text node to the projectItem after the span
@@ -118,19 +127,15 @@ function renderProjects() {
 }
 function deleteProject(projectId){
     Projects = Projects.filter(project => project.id !== projectId);
-    selectedProjectId = 'project-0';
+    selectedProjectId = null;
     saveToLocalStorage();
     clearElement(projectsList);
-
-    const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
-    const selectedProject = Projects.find(project => project.id == numericProjectId);
-    renderProjectTasks(selectedProject)
+    clearElement(tasksList);
     renderProjects();
 }
 renderProjects();
 
 //Tasks section
-
 tasksForm.addEventListener('submit',e=>{
     const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
     const selectedProject = Projects.find(project => project.id == numericProjectId);
@@ -189,61 +194,71 @@ function completeTask(e){
 
 function renderProjectTasks(selectedProject){
     clearElement(tasksList);
-    selectedProject.tasks.forEach(task => {
-        const taskItem = document.createElement('li');
-
-        const taskListItemSpan = document.createElement('span');
-        taskListItemSpan.classList.add('task-list-item');
-        taskItem.dataset.taskId = task.id;
-
-        const icon = document.createElement('i');
-        icon.classList.add('fa-regular', task.complete ? 'fa-check-square': 'fa-square');
-        icon.addEventListener('click',(e) => completeTask(e))
-        taskListItemSpan.appendChild(icon);
-        taskListItemSpan.appendChild(document.createTextNode(` ${task.title}`));
-        
-        const prioritySpan = document.createElement('span');
-        prioritySpan.classList.add('priority-header');
-        prioritySpan.textContent = `${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)} priority`;
-        
-        const dueDateSpan = document.createElement('span');
-        dueDateSpan.classList.add('duedate-header');
-        const dueDate = new Date(task.duedate);
-        dueDateSpan.textContent = dueDate.toLocaleString();
-
-        taskItem.appendChild(taskListItemSpan);
-        taskItem.appendChild(prioritySpan);
-        taskItem.appendChild(dueDateSpan);
-
-        if (task.complete) {
-            taskItem.classList.add('complete');
-        }
-        const functionsDiv = document.createElement('div')
-        functionsDiv.classList.add('functions-div')
-        const deleteIcon = document.createElement('i');
-        deleteIcon.classList.add('fa-solid','fa-trash');
-        deleteIcon.addEventListener('click',()=>deleteTask(task.id));
-        const editIcon = document.createElement('i');
-        editIcon.classList.add('fa-solid','fa-pen');
-        editIcon.addEventListener('click',()=>editTask(task.id));
-        functionsDiv.appendChild(deleteIcon);
-        functionsDiv.appendChild(editIcon);
-        taskItem.appendChild(functionsDiv);
-
-        tasksList.appendChild(taskItem);
-    });
+    if(selectedProject){
+        selectedProject.tasks.forEach(task => {
+            const taskItem = document.createElement('li');
+    
+            const taskListItemSpan = document.createElement('span');
+            taskListItemSpan.classList.add('task-list-item');
+            taskItem.dataset.taskId = task.id;
+    
+            const icon = document.createElement('i');
+            icon.classList.add('fa-regular', task.complete ? 'fa-check-square': 'fa-square');
+            icon.addEventListener('click',(e) => completeTask(e))
+            taskListItemSpan.appendChild(icon);
+            taskListItemSpan.appendChild(document.createTextNode(` ${task.title}`));
+            
+            const descriptionSpan = document.createElement('span');
+            descriptionSpan.classList.add('description-header');
+            descriptionSpan.textContent = `${task.description}`
+            
+            const dueDateSpan = document.createElement('span');
+            dueDateSpan.classList.add('duedate-header');
+            const dueDate = new Date(task.duedate);
+            dueDateSpan.textContent = dueDate.toLocaleString();
+    
+            taskItem.appendChild(taskListItemSpan);
+            taskItem.appendChild(descriptionSpan);
+            taskItem.appendChild(dueDateSpan);
+    
+            if (task.complete) {
+                taskItem.classList.add('complete');
+            }
+           
+            if (task.priority == 'high'){
+                taskItem.classList.add('high');
+            } else if (task.priority == 'medium'){
+                taskItem.classList.add('medium')
+            } else{
+                taskItem.classList.add('low');
+            }
+          
+            const functionsDiv = document.createElement('div')
+            functionsDiv.classList.add('functions-div')
+            const deleteIcon = document.createElement('i');
+            deleteIcon.classList.add('fa-solid','fa-trash');
+            deleteIcon.addEventListener('click',()=>deleteTask(task.id));
+            const editIcon = document.createElement('i');
+            editIcon.classList.add('fa-solid','fa-pen');
+            editIcon.addEventListener('click',()=>editTask(task.id));
+            functionsDiv.appendChild(deleteIcon);
+            functionsDiv.appendChild(editIcon);
+            taskItem.appendChild(functionsDiv);
+    
+            tasksList.appendChild(taskItem);
+        });
+    }
 }
-const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
-const selectedProject = Projects.find(project => project.id == numericProjectId);
-renderProjectTasks(selectedProject);
-
 function deleteTask(taskId) {
+    const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
+    const selectedProject = Projects.find(project => project.id == numericProjectId);
     selectedProject.tasks = selectedProject.tasks.filter(task => task.id !== taskId);
     saveToLocalStorage();
     renderProjectTasks(selectedProject);
 }
-
 function editTask(id){
+    const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
+    const selectedProject = Projects.find(project => project.id == numericProjectId);
     const task = selectedProject.tasks.find(task => task.id == id);
     if (!task) return;
 
@@ -257,4 +272,14 @@ function editTask(id){
     modal.showModal();
 }
 
+if (selectedProjectId){
+    selectedProjectId = selectedProjectId
+} else {
+    const activeProjectIcon = document.querySelector('.project-list-item')
+    activeProjectIcon.classList.add('active');
+    selectedProjectId = 'project-0';
+}
+const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
+const selectedProject = Projects.find(project => project.id == numericProjectId);
+renderProjectTasks(selectedProject);
 
