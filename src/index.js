@@ -22,7 +22,7 @@ let selectedProjectId = localStorage.getItem(LOCAL_STORAGE_SELECTED_PROJECT_KEY)
 
 
 displayForm.addEventListener('click',()=>{
-    console.log(selectedProjectId)
+    //console.log(selectedProjectId)
     if (selectedProjectId == null) {
         alert("Click on a project to attach tasks");
     } else {
