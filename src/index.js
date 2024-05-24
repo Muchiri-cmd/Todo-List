@@ -20,17 +20,29 @@ let Projects = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PROJECT_KEY)) || [{
 //get selected project from projects
 let selectedProjectId = localStorage.getItem(LOCAL_STORAGE_SELECTED_PROJECT_KEY)
 
+if (selectedProjectId === null) {
+    console.log("inside else");
+    const activeProjectIcon = document.querySelector('.project-list-item');
+    if (activeProjectIcon) {
+        activeProjectIcon.classList.add('active');
+        selectedProjectId = 0; 
+        saveToLocalStorage();
+    }
+}
+const selectedProject = Projects.find(project => project.id == selectedProjectId)
+renderProjectTasks(selectedProject);
 
-displayForm.addEventListener('click',()=>{
-    //console.log(selectedProjectId)
-    if (selectedProjectId == null) {
-        alert("Click on a project to attach tasks");
+
+displayForm.addEventListener('click', () => {
+    console.log(selectedProjectId);
+    if (selectedProjectId === null || selectedProjectId === 'null') { 
+        alert("Click on a project to attach tasks to");
     } else {
         tasksForm.reset();
         modal.showModal();
     }
-   
-})
+});
+
 hideForm.addEventListener('click',(e)=>{
     modal.close();
 })
@@ -270,15 +282,5 @@ function editTask(id){
     modal.showModal();
 }
 
-if (selectedProjectId){
-    selectedProjectId = selectedProjectId
-} else {
-    console.log("inside else")
-    const activeProjectIcon = document.querySelector('.project-list-item')
-    activeProjectIcon.classList.add('active');
-    selectedProjectId = 0 ;
-    saveToLocalStorage();
-}
-const selectedProject = Projects.find(project => project.id == selectedProjectId)
-renderProjectTasks(selectedProject);
+
 
