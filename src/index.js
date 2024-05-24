@@ -22,11 +22,12 @@ let selectedProjectId = localStorage.getItem(LOCAL_STORAGE_SELECTED_PROJECT_KEY)
 
 
 displayForm.addEventListener('click',()=>{
-    if (selectedProjectId){    
-    tasksForm.reset();
-    modal.showModal();
-    } else{
-        alert("No Project to attach tasks. Add Projects")
+    console.log(selectedProjectId)
+    if (selectedProjectId == null) {
+        alert("Click on a project to attach tasks");
+    } else {
+        tasksForm.reset();
+        modal.showModal();
     }
    
 })
@@ -63,6 +64,10 @@ projectForm.addEventListener('submit',e=>{
         clearElement(projectsList);
         projectForm.style.display = 'none';
         renderProjects();
+        const selectedProject = Projects.find(project => project.id == selectedProjectId);
+        console.log(selectedProject.name)
+        projectName.textContent = `${selectedProject.name}`;
+        renderProjectTasks(selectedProject)
         newProjectInput.value='';
     }
 })
@@ -70,14 +75,12 @@ projectForm.addEventListener('submit',e=>{
 projectsList.addEventListener('click',e => {   
     if (e.target.tagName.toLowerCase() == 'li'){
         selectedProjectId = e.target.id;
-        saveToLocalStorage();
-        const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
-        const selectedProject = Projects.find(project => project.id == numericProjectId);
-        projectName.textContent = `${selectedProject.name}`;
+        saveToLocalStorage();  
         clearElement(projectsList);
         renderProjects();
-        renderProjectTasks(selectedProject);
-        
+        const selectedProject = Projects.find(project => project.id == selectedProjectId);
+        projectName.textContent = `${selectedProject.name}`
+        renderProjectTasks(selectedProject)
     }
 })
 function createProject(name){
@@ -104,7 +107,6 @@ function renderProjects() {
         const span = document.createElement('span');
         span.classList.add('project-list-icon');
         
-        console.log(selectedProjectId);
 
         if (projectItem.id === selectedProjectId) {
             projectItem.classList.add('active');
@@ -137,8 +139,7 @@ renderProjects();
 
 //Tasks section
 tasksForm.addEventListener('submit',e=>{
-    const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
-    const selectedProject = Projects.find(project => project.id == numericProjectId);
+    const selectedProject = Projects.find(project => project.id == selectedProjectId);
 
     //console.log(selectedProject);
     e.preventDefault();
@@ -173,8 +174,7 @@ function createTask(title,description,duedate,priority){
     return {title,description,duedate,priority,complete:false, id: Date.now().toString()}
 }
 function completeTask(e){
-    const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
-    const selectedProject = Projects.find(project => project.id == numericProjectId);
+    const selectedProject = Projects.find(project => project.id == selectedProjectId);
 
     if (e.target.closest('li')){
         const taskId = e.target.closest('li').dataset.taskId;
@@ -250,15 +250,13 @@ function renderProjectTasks(selectedProject){
     }
 }
 function deleteTask(taskId) {
-    const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
-    const selectedProject = Projects.find(project => project.id == numericProjectId);
+    const selectedProject = Projects.find(project => project.id == selectedProjectId);
     selectedProject.tasks = selectedProject.tasks.filter(task => task.id !== taskId);
     saveToLocalStorage();
     renderProjectTasks(selectedProject);
 }
 function editTask(id){
-    const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
-    const selectedProject = Projects.find(project => project.id == numericProjectId);
+    const selectedProject = Projects.find(project => project.id == selectedProjectId);
     const task = selectedProject.tasks.find(task => task.id == id);
     if (!task) return;
 
@@ -275,11 +273,12 @@ function editTask(id){
 if (selectedProjectId){
     selectedProjectId = selectedProjectId
 } else {
+    console.log("inside else")
     const activeProjectIcon = document.querySelector('.project-list-item')
     activeProjectIcon.classList.add('active');
-    selectedProjectId = 'project-0';
+    selectedProjectId = 0 ;
+    saveToLocalStorage();
 }
-const numericProjectId = parseInt(selectedProjectId.replace('project-', ''));
-const selectedProject = Projects.find(project => project.id == numericProjectId);
+const selectedProject = Projects.find(project => project.id == selectedProjectId)
 renderProjectTasks(selectedProject);
 
