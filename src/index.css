@@ -21,7 +21,6 @@ li {
     display: grid;
     grid-template-columns: 1fr 3fr;
     min-height: 80vh;
-    
 }
 .projects-container,.project-tasks-container{
     padding:2em;
@@ -89,6 +88,7 @@ li {
     font-size: inherit;
     outline: none;
     padding: 0.25em;
+    width:9em;
 }
 .add-project-form{
     margin:1em;
@@ -195,8 +195,21 @@ li {
         cursor:pointer;
     }
 }
+.fa-bars,.fa-eye-slash{
+    font-size:2rem;
+}
+.add-project-btn{
+    margin:.4em;
+}
 
 /* MEDIA QUAERIES */
+@media (min-width: 1001px) {
+    .fa-bars {
+        display: none;
+    }.fa-eye-slash{
+        display: none;
+    }
+}
 @media screen and (max-width:1590px){
     body{
         font-size:18px;
@@ -234,19 +247,40 @@ li {
         width:9rem;
     }
 }
-@media screen and (max-width:860px){
+@media screen and (max-width:1000px){
+    body{
+        padding:.5rem;
+    }
     .content{
-        padding:1.5em;
-        display: flex;
-        flex-direction: column;
-        min-height: 90vh;
+        min-height: 99vh;
+        padding:0;
+    }
+    .projects-container{
+        display: none;
+        position: fixed; 
+        width: 30%;
+        height: 100%;
+        z-index: 10; 
+    }
+    .projects-container.show {
+        display: block;
+    }
+    .toggle-projects,.toggle-tasks {
+        display: block; 
+        cursor: pointer;
+    }
+    .project-name,.projects-header{
         padding:1rem;
     }
-    .project-tasks-container{
-        min-height:50vh;
+    .projects-container,.project-tasks-container{
+        min-height:90vh;
     }
-    .new-project-input{
-        width:15rem;
+    .project-tasks-container{
+        width:99vw;
+    }
+ 
+    .header{
+        display: none;
     }
    
 }
@@ -258,22 +292,37 @@ li {
     }
     .content{
         padding:.5rem;
+        padding:0;
+        margin:0;
+    }
+    .project-tasks-container{
+        width:90vw;
+        
+    }
+    .projects-container{ 
+        width: 50%;
+        height: 100%;
+        z-index: 10; 
+        padding:.8rem;
+    }
+    .fa-eye-slash{
+        font-size:1.5rem;
+    }
+    .projects-header{
+        padding:.5rem .1rem;
+    }
+    .toggle-form-btn{
+        margin-left:1rem;
     }
     #modal{
         top:50%;
         left:5%;
     }
     .new-project-input{
-        width:8rem;
-    }
-    .projects-list{
-        display: grid;
-        grid-template-columns: repeat(2,1fr);
-        gap:.1rem;
-        padding:0;
+        width:7rem;
     }
     .project-task-list>li,.projects-list>li{
-        margin:.2rem .5rem 0rem .5rem;
+        margin:.2rem .5rem .6rem .5rem;
         display: flex;
         align-items: center;
         i{
@@ -288,7 +337,7 @@ li {
     }
     .project-tasks-container{
         padding:1rem;
-        min-height:60vh;
+        width:98vw;
     }
     .toggle-taskform-btn{
         padding:.2rem;

@@ -15,6 +15,18 @@ const modal = document.querySelector('.modal');
 const LOCAL_STORAGE_PROJECT_KEY = 'projects'
 const LOCAL_STORAGE_SELECTED_PROJECT_KEY = 'selectedProject'
 
+
+const toggleProjectsIcon = document.querySelector('.toggle-projects');
+const projectsContainer = document.querySelector('.projects-container');
+
+toggleProjectsIcon.addEventListener('click', () => {
+    projectsContainer.classList.toggle('show');
+});
+const tasksIcon = document.querySelector('.toggle-tasks');
+tasksIcon.addEventListener('click', () => {
+    projectsContainer.classList.remove('show');
+});
+
 //get projects from local storage instead of array but if n local, give empty array
 let Projects = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PROJECT_KEY)) || [{"name":"Default Project","id":0,"tasks":[]}]
 //get selected project from projects
@@ -36,7 +48,7 @@ renderProjectTasks(selectedProject);
 displayForm.addEventListener('click', () => {
     console.log(selectedProjectId);
     if (selectedProjectId === null || selectedProjectId === 'null') { 
-        alert("Click on a project to attach tasks to");
+        alert("Click on a project to attach tasks to.");
     } else {
         tasksForm.reset();
         modal.showModal();
