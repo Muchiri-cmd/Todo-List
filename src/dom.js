@@ -145,11 +145,11 @@ class DOMManager {
             }
         })
         this.toggleProjectsIcon.addEventListener('click', () => {
-            projectsContainer.classList.toggle('show');
+            this.projectContainer.classList.toggle('show');
         });
         
         this.tasksIcon.addEventListener('click', () => {
-            projectsContainer.classList.remove('show');
+            this.projectContainer.classList.remove('show');
         });
     }
 }
